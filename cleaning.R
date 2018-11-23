@@ -16,8 +16,8 @@ raw_data = read.csv("strava_activity.csv")
 clean_data = raw_data %>%
   dplyr::select(athlete.sex, achievement_count, distance, average_speed, average_heartrate, type,
                 average_watts, kilojoules, max_speed, elapsed_time, moving_time, 
-                athlete.city, athlete.country, athlete.state) #%>%
-  #na.omit()
+                athlete.city, athlete.country, athlete.state %>%
+  na.omit()
 
 #write leaned data to new .csv file
-write.csv(clean_data, file="cleanData.csv", row.names=FALSE )
+write.csv(clean_data, file="cleanData.csv", row.names=FALSE)
