@@ -99,4 +99,4 @@ plot6 <- ggplot(f_speed15, aes(x= average_speed, y= distance, group = 1)) +
 
 grid.arrange(plot3, plot4, plot5, plot6, nrow=2, ncol=2)
 
-
+dev.off()
