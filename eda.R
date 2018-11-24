@@ -91,7 +91,7 @@ plot5 <- ggplot(f_speed500, aes(x= average_speed, y= distance, group = 1)) +
 
 plot6 <- ggplot(f_speed15, aes(x= average_speed, y= distance, group = 1)) +
   geom_line(color="blue") +
-  geom_vline(aes(xintercept = m_spd_avg), color="red", linetype="dashed") +
+  geom_vline(aes(xintercept = f_spd_avg), color="red", linetype="dashed") +
   ggtitle("Male Average Speed under 10") + 
   xlab("Average Speed") +
   ylab("Distance") +
