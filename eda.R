@@ -37,21 +37,21 @@ require(gridExtra)
 plot1 <- ggplot(male, aes(x= average_speed, y= distance, group = 1)) +
   geom_line(color="blue") +
   ggtitle("Male Distance Over Average Speed") + 
-  xlab("Average Speed") +
-  ylab("Distance") +
+  xlab("Average Speed (m/s)") +
+  ylab("Distance (m)") +
   theme(plot.title = element_text(hjust = 0.5))
 
 plot2 <- ggplot(female, aes(x= average_speed, y= distance, group = 1)) +
          geom_line(color="blue") +
   ggtitle("Female Distance Over Average Speed") + 
-  xlab("Average Speed") +
-  ylab("Distance") +
+  xlab("Average Speed (m/s)") +
+  ylab("Distance (m)") +
   theme(plot.title = element_text(hjust = 0.5))
 
 grid.arrange(plot1, plot2, ncol=2)
 
 # Gain a deeper understanding of distance vs. speed plot for both genders
-# Male speed under 500 and 15.
+# Male speed under 500 m/s and 15 m/s.
 m_spd_avg <- mean(male$average_speed)
 m_speed500 <- male %>%
   filter(average_speed < 500)
@@ -61,20 +61,20 @@ m_speed15 <- male %>%
 
 plot3 <- ggplot(m_speed500, aes(x= average_speed, y= distance, group = 1)) +
   geom_line(color="blue") +
-  ggtitle("Male Average Speed under 500") + 
-  xlab("Average Speed") +
-  ylab("Distance") +
+  ggtitle("Male Average Speed under 500 m/s") + 
+  xlab("Average Speed (m/s)") +
+  ylab("Distance (m)") +
   theme(plot.title = element_text(hjust = 0.5))
 
 plot4 <- ggplot(m_speed15, aes(x= average_speed, y= distance, group = 1)) +
   geom_line(color="blue") +
   geom_vline(aes(xintercept = m_spd_avg), color="red", linetype="dashed") +
-  ggtitle("Male Average Speed under 10") + 
-  xlab("Average Speed") +
-  ylab("Distance") +
+  ggtitle("Male Average Speed under 15 m/s") + 
+  xlab("Average Speed (m/s)") +
+  ylab("Distance (m)") +
   theme(plot.title = element_text(hjust = 0.5))
 
-# Female speed under 500 and 15.
+# Female speed under 500 m/s and 15 m/s.
 f_spd_avg <- mean(female$average_speed)
 f_speed500 <- female %>%
   filter(average_speed < 500)
@@ -84,19 +84,20 @@ f_speed15 <- female %>%
 
 plot5 <- ggplot(f_speed500, aes(x= average_speed, y= distance, group = 1)) +
   geom_line(color="blue") +
-  ggtitle("Male Average Speed under 500") + 
-  xlab("Average Speed") +
-  ylab("Distance") +
+  ggtitle("Female Average Speed under 500 m/s") + 
+  xlab("Average Speed (m/s)") +
+  ylab("Distance (m)") +
   theme(plot.title = element_text(hjust = 0.5))
 
 plot6 <- ggplot(f_speed15, aes(x= average_speed, y= distance, group = 1)) +
   geom_line(color="blue") +
   geom_vline(aes(xintercept = f_spd_avg), color="red", linetype="dashed") +
-  ggtitle("Male Average Speed under 10") + 
-  xlab("Average Speed") +
-  ylab("Distance") +
+  ggtitle("Female Average Speed under 15 m/s") + 
+  xlab("Average Speed (m/s)") +
+  ylab("Distance (m)") +
   theme(plot.title = element_text(hjust = 0.5))
 
 grid.arrange(plot3, plot4, plot5, plot6, nrow=2, ncol=2)
 
 dev.off()
+
