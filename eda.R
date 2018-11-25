@@ -1,9 +1,10 @@
 #install.packages("gridExtra")
 library(ggplot2)
+library(ggthemes)
 library(dplyr)
 library(gridExtra)
 
-data <- read.csv('./cleanData.csv')
+data <- read.csv('./cleanData.csv', na.strings = c("", "NA"))
 
 # Male and female data
 freq <- data %>%
@@ -98,6 +99,63 @@ plot6 <- ggplot(f_speed15, aes(x= average_speed, y= distance, group = 1)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 grid.arrange(plot3, plot4, plot5, plot6, nrow=2, ncol=2)
+
+# Type of workout for both genders
+type_freq <- data %>%
+  group_by(athlete.sex, type) %>%
+  summarise(type_counts = n())
+
+ggplot(type_freq, aes(x=type, y=type_counts, fill=athlete.sex)) +
+  geom_bar(stat="identity", position=position_dodge()) + 
+  ggtitle("Common Type of Exercise Between Genders") +
+  xlab("Type of Exercise") +
+  ylab("Frequency") + 
+  guides(fill = guide_legend(title = "Gender")) +
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 90, hjust = 0.5))
+
+# Question 2 
+# Exploring the common countrywide exercise type 
+country_type <- data %>%
+  group_by(type, athlete.country) %>%
+  summarise(type_counts = n()) %>%
+  na.omit()
+
+summary(country_type)
+
+# Filter data based on the summarized data
+country_type <- country_type %>%
+  filter(type_counts > 10)
+
+ggplot(country_type, aes(x=athlete.country, y=type_counts, fill=type)) +
+  geom_bar(stat="identity", position=position_dodge()) + 
+  ggtitle("Common Type of Exercise Across Countries") +
+  xlab("Countries") +
+  ylab("Frequency") + 
+  guides(fill = guide_legend(title = "Exercise Type")) +
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 90, hjust = 0.5))
+
+# Examining the exercising gender population ratio in each country
+gender_country <- data %>%
+  group_by(athlete.sex, athlete.country) %>%
+  summarise(total = n()) %>%
+  arrange(desc(total)) %>%
+  na.omit()
+
+summary(gender_country)
+
+gender_country <- gender_country %>%
+  filter(total > 10)
+
+# Plot Gender vs. Countries
+ggplot(gender_country, aes(x=athlete.country, y = ifelse(test = athlete.sex == "M", 
+                                                         yes = -total, no = total), fill=athlete.sex)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(breaks = seq(-1500, 1500, 200), labels = abs(seq(-1500, 1500, 200))) +
+  coord_flip() +
+  labs(title="Gender Vs. Countries", y= "Frequency", x= "Countries") +
+  guides(fill = guide_legend(title = "Gender")) +
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 90, hjust = 0.5)) +
+  scale_fill_brewer(palette = "Dark2") 
 
 dev.off()
 
