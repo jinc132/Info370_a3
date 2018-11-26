@@ -1,4 +1,5 @@
 library(dplyr)
+library(corrplot)
 data <- read.csv('./cleanData.csv', na.strings = c("", "NA"))
 
 # Question 1 
@@ -31,4 +32,17 @@ summary(fem_dist_lm)
 
 plot(fem_movng_lm)
 plot(fem_dist_lm)
+
+# Q2 
+# Calculate the number of athletes in each country
+country_corr <- data %>%
+  group_by(athlete.sex, athlete.country) %>%
+  mutate(athletes.in.country = n()) %>%
+  na.omit()
+
+country_corr <- country_corr %>%
+  select(athletes.in.country, distance, average_speed, average_heartrate, moving_time, elapsed_time)
+
+correlations <- cor(country_corr[3:8], use = "pairwise.complete.obs")
+corrplot(correlations, type = "upper")
 
