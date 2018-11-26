@@ -44,5 +44,5 @@ country_corr <- country_corr %>%
   select(athletes.in.country, distance, average_speed, average_heartrate, moving_time, elapsed_time)
 
 correlations <- cor(country_corr[3:8], use = "pairwise.complete.obs")
-corrplot(correlations, type = "upper")
+corrplot.mixed(correlations, lower.col = "black", number.cex = .7)
 
