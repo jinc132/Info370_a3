@@ -22,7 +22,7 @@ average_speed <- remove_outliers(data$average_speed)
 max_speed <- remove_outliers(data$max_speed)
 elapsed_time <- remove_outliers(data$elapsed_time)
 
-clean_data <- data.frame(data$athlete.sex, distance, moving_time, average_speed, max_speed, elapsed_time) %>%
+clean_data <- data.frame(data$athlete.sex, data$athlete.country, distance, moving_time, average_speed, max_speed, elapsed_time) %>%
   na.omit()
 
 male_data <- clean_data %>%
@@ -31,7 +31,7 @@ male_data <- clean_data %>%
 female_data <- clean_data %>%
   filter(data.athlete.sex == "F")
 
-# male
+# male model
 par(mfrow = c(4,4))
   
 male_movng_lm <- lm(distance ~ average_speed + moving_time + max_speed + elapsed_time, data = male_data)
@@ -43,7 +43,7 @@ summary(male_dist_lm)
 plot(male_movng_lm)
 plot(male_dist_lm)
 
-#female
+# female model
 par(mfrow= c(4,4))
 
 fem_movng_lm <- lm(distance ~ average_speed + moving_time + max_speed + elapsed_time, data = female_data)
@@ -57,14 +57,29 @@ plot(fem_dist_lm)
 
 # Q2 
 # Calculate the number of athletes in each country
-country_corr <- data %>%
-  group_by(athlete.sex, athlete.country) %>%
+country_corr <- clean_data %>%
+  group_by(data.athlete.sex, data.athlete.country) %>%
   mutate(athletes.in.country = n()) %>%
   na.omit()
 
 country_corr <- country_corr %>%
-  select(athletes.in.country, distance, average_speed, average_heartrate, moving_time, elapsed_time)
+  select(athletes.in.country, distance, average_speed, moving_time, elapsed_time)
 
-correlations <- cor(country_corr[3:8], use = "pairwise.complete.obs")
+correlations <- cor(country_corr[3:7], use = "pairwise.complete.obs")
 corrplot.mixed(correlations, lower.col = "black", number.cex = .7)
 
+male_focus <- country_corr %>%
+  filter(data.athlete.sex == "M")
+# model male athletes in for each country.
+par(mfrow = c(1, 4))
+lm_male <- lm (athletes.in.country ~ distance + average_speed + moving_time + elapsed_time, data = male_focus)
+summary(lm_male)
+plot(lm_male)
+
+female_focus <- country_corr %>%
+  filter(data.athlete.sex == "F")
+# model male athletes in for each country.
+par(mfrow = c(1, 4))
+lm_female <- lm (athletes.in.country ~ distance + average_speed + moving_time + elapsed_time, data = female_focus)
+summary(lm_female)
+plot(lm_female)
