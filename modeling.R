@@ -3,14 +3,39 @@ library(corrplot)
 data <- read.csv('./cleanData.csv', na.strings = c("", "NA"))
 
 # Question 1 
+# Remove outliers from the data for a more accurate model 
+remove_outliers <- function(x, na.rm = TRUE, ...) {
+  qnt <- quantile(x, probs = c(0.25, 0.75), na.rm = na.rm, ...)
+  H <- 1.5 * IQR(x, na.rm)
+  
+  y <- x
+  
+  y[x < (qnt[1] - H)] <- NA
+  y[x > (qnt[2] + H)] <- NA
+  y
+}
+
+# Begin removing outliers and create a male and female data frame
+distance <- remove_outliers(data$distance)
+moving_time <- remove_outliers(data$moving_time)
+average_speed <- remove_outliers(data$average_speed)
+max_speed <- remove_outliers(data$max_speed)
+elapsed_time <- remove_outliers(data$elapsed_time)
+
+clean_data <- data.frame(data$athlete.sex, distance, moving_time, average_speed, max_speed, elapsed_time) %>%
+  na.omit()
+
+male_data <- clean_data %>%
+  filter(data.athlete.sex == "M")
+
+female_data <- clean_data %>%
+  filter(data.athlete.sex == "F")
+
 # male
 par(mfrow = c(4,4))
-male_data <- data %>%
-  filter(athlete.sex == "M") %>%
-  na.omit()
   
-male_movng_lm <- lm(moving_time ~ distance + average_speed + average_heartrate, data = male_data)
-male_dist_lm <- lm(distance ~ average_speed + average_heartrate + moving_time, data = male_data)
+male_movng_lm <- lm(distance ~ average_speed + moving_time + max_speed + elapsed_time, data = male_data)
+male_dist_lm <- lm(moving_time ~ average_speed + max_speed + elapsed_time + distance, data = male_data)
 
 summary(male_movng_lm)
 summary(male_dist_lm)
@@ -20,12 +45,9 @@ plot(male_dist_lm)
 
 #female
 par(mfrow= c(4,4))
-female_data <- data %>%
-  filter(athlete.sex == "F") %>%
-  na.omit()
 
-fem_movng_lm <- lm(moving_time ~ distance + average_speed + average_heartrate, data = female_data)
-fem_dist_lm <- lm(distance ~ average_speed + average_heartrate + moving_time, data = female_data)
+fem_movng_lm <- lm(distance ~ average_speed + moving_time + max_speed + elapsed_time, data = female_data)
+fem_dist_lm <- lm(moving_time ~ average_speed + max_speed + elapsed_time + distance, data = female_data)
 
 summary(fem_movng_lm)
 summary(fem_dist_lm)
