@@ -34,25 +34,19 @@ female_data <- clean_data %>%
 # male model
 par(mfrow = c(4,4))
   
-male_movng_lm <- lm(distance ~ average_speed + moving_time + max_speed + elapsed_time, data = male_data)
-male_dist_lm <- lm(moving_time ~ average_speed + max_speed + elapsed_time + distance, data = male_data)
+male_dist_lm <- lm(distance ~ average_speed + moving_time + max_speed + elapsed_time, data = male_data)
 
-summary(male_movng_lm)
 summary(male_dist_lm)
 
-plot(male_movng_lm)
 plot(male_dist_lm)
 
 # female model
 par(mfrow= c(4,4))
 
-fem_movng_lm <- lm(distance ~ average_speed + moving_time + max_speed + elapsed_time, data = female_data)
-fem_dist_lm <- lm(moving_time ~ average_speed + max_speed + elapsed_time + distance, data = female_data)
+fem_dist_lm <- lm(distance ~ average_speed + moving_time + max_speed + elapsed_time, data = female_data)
 
-summary(fem_movng_lm)
 summary(fem_dist_lm)
 
-plot(fem_movng_lm)
 plot(fem_dist_lm)
 
 # Q2 
