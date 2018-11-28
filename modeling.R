@@ -63,6 +63,7 @@ corrplot.mixed(correlations, lower.col = "black", number.cex = .7)
 
 male_focus <- country_corr %>%
   filter(data.athlete.sex == "M")
+
 # model male athletes in for each country.
 par(mfrow = c(4, 4))
 lm_male <- lm (athletes.in.country ~ distance + average_speed + moving_time + elapsed_time, data = male_focus)
@@ -71,6 +72,7 @@ plot(lm_male, main = "Male Model:")
 
 female_focus <- country_corr %>%
   filter(data.athlete.sex == "F")
+
 # model male athletes in for each country.
 lm_female <- lm (athletes.in.country ~ distance + average_speed + moving_time + elapsed_time, data = female_focus)
 summary(lm_female)
