@@ -14,7 +14,7 @@ remove_outliers <- function(x, na.rm = TRUE, ...) {
   y[x > (qnt[2] + H)] <- NA
   y
 }
-
+summary(male_data$average_speed)
 # Begin removing outliers and create a male and female data frame
 distance <- remove_outliers(data$distance)
 moving_time <- remove_outliers(data$moving_time)
@@ -77,3 +77,4 @@ female_focus <- country_corr %>%
 lm_female <- lm (athletes.in.country ~ distance + average_speed + moving_time + elapsed_time, data = female_focus)
 summary(lm_female)
 plot(lm_female, main = "Female Model:")
+
